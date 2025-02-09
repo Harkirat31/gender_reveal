@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import backgroundImage from '/src/assets/1.png';
 import './App.css'
 
@@ -8,6 +8,29 @@ function App() {
   const [gender, setGender] = useState("")
   const [message, setMessage] = useState("")
   const [loading, setLoading] = useState(false)
+  const [data, setData] = useState<[]|null>(null)
+  const [girlData, setGirlData] = useState<[]|null>(null)
+  const [boyData, setBoyData] = useState<[]|null>(null)
+
+
+  useEffect(()=>{
+    fetch("https://api.easeyourtasks.com/auth/getGenderData", {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then(async (res)=>{
+      const jsonData = await res.json()
+      if(jsonData &&jsonData.genderData){
+        setData(jsonData.genderData)
+        const girlArray  = jsonData.genderData.filter((d:any)=> d.gender==="girl")
+        setGirlData(girlArray)
+        const boyArray  = jsonData.genderData.filter((d:any)=> d.gender==="boy")
+        setBoyData(boyArray)
+
+      }
+    })
+  },[message])
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setGender(event.target.value); // Update state with selected value
@@ -49,7 +72,7 @@ function App() {
   return <div className="h-screen w-screen  text-black style-script-regular">
     <div className='flex h-screen flex-col items-center relative'>
       <img className='absolute object-cover h-screen w-screen opacity-50 ' src={backgroundImage}></img>
-      <div className='z-10 mt-32'>
+      <div className='z-10 mt-24 overflow-y-scroll px-10'>
         {message.length == 0 && <>
           <h1 className='text-5xl text-gray-600 text-center'>What do you thing</h1>
           <h1 className='text-5xl  text-gray-600 text-center'>the baby is ?</h1>
@@ -75,8 +98,30 @@ function App() {
             <button type='button' onClick={handleSubmit} className='w-max self-center p-1 font-bold mt-4 bg-white rounded'>{loading ? "Wait..." : "Submit"}</button>
           </>}
 
+          {data && data.length>0 &&
+            <div>
+              <h1 className='text-center mt-4 text-3xl underline'> Current Status</h1>
+              <div className='flex flex-row justify-between space-x-10 mt-5'>
+                <h1 className='text-2xl'> {`Boy (${((boyData!.length/data.length)*100).toFixed(1)}%)`}</h1>
+                <h1 className='text-2xl'> {`Girl (${((girlData!.length/data.length)*100).toFixed(1)}%)`}</h1>
+              </div>
+              <div className=' flex flex-row justify-between '>
 
+                <div className='relative flex flex-wrap w-1/2  gap-1 '>
+                {boyData && boyData.map((v:any)=>{
+                    return <p className='text-blue-500'>{v.name}</p>
+                  })}
+                </div>
 
+                <div className='relative flex flex-wrap w-1/2  gap-1 justify-end'>
+                  {girlData && girlData.map((v:any)=>{
+                    return <p className='text-pink-500'>{v.name}</p>
+                  })}
+
+                </div>
+
+              </div>
+            </div>}
 
 
         </div>
