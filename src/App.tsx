@@ -108,14 +108,14 @@ function App() {
               <div className=' flex flex-row justify-between '>
 
                 <div className='relative flex flex-wrap w-1/2  gap-1 '>
-                {boyData && boyData.map((v:any)=>{
-                    return <p className='text-blue-500'>{v.name}</p>
+                {boyData && boyData.map((v:any,index)=>{
+                    return <p className='text-blue-500'>{v.name + (index==boyData.length-1?"":",")}</p>
                   })}
                 </div>
 
                 <div className='relative flex flex-wrap w-1/2  gap-1 justify-end'>
-                  {girlData && girlData.map((v:any)=>{
-                    return <p className='text-pink-500'>{v.name}</p>
+                  {girlData && girlData.map((v:any,index)=>{
+                    return <p className='text-pink-500'>{v.name + (index==girlData.length-1?"":",")}</p>
                   })}
 
                 </div>
