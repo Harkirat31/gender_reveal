@@ -74,7 +74,7 @@ function App() {
       <img className='absolute object-cover h-screen w-screen opacity-50 ' src={backgroundImage}></img>
       <div className='z-10 mt-24 overflow-y-scroll px-10'>
         {message.length == 0 && <>
-          <h1 className='text-5xl text-gray-600 text-center'>What do you thing</h1>
+          <h1 className='text-5xl text-gray-600 text-center'>What do you think</h1>
           <h1 className='text-5xl  text-gray-600 text-center'>the baby is ?</h1>
         </>}
         <div className='flex flex-col justify-center'>
